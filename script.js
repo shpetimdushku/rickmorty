@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // characterCard.classList.add('col');
                 characterCard.classList.add('character-card');
                 characterCard.innerHTML = `
-                <div class="card shadow-sm">
+                <div class="card shadow-lg">
                     <img class="bd-placeholder-img card-img-top"  src="${data.image}" alt="${data.name}">
                     <div class="card-body">
                         <h5 class="card-text">${data.name}</h5>

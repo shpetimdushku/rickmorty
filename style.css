@@ -20,6 +20,16 @@ body {
     min-height: 100vh; 
 }
 
+@media only screen and (max-width: 1200px) {
+
+    .main {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+    }
+    
+}
+
 .navbar {
     justify-content: end;
 }
@@ -27,8 +37,33 @@ body {
 #characterContainer {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 1.6rem;
 }
+
+@media only screen and (max-width: 1200px) {
+    #characterContainer {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    #characterContainer {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    #characterContainer {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 0.6rem;
+    }
+}
+
 .character-card {
     text-align: center;
 }
@@ -38,6 +73,11 @@ body {
 }
 .card, .card-body {
     border: none;
+    transition: 0.3s all ease-in-out;
+}
+.character-card:hover .card {
+    box-shadow: 0 1rem 3rem rgba(255, 255, 255, 0.975) !important; 
+    transition: 0.3s all ease-in-out;
 }
 .card-body {
     padding: 0.875rem;
