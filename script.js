@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const characterContainer = document.getElementById('characterContainer');
     const errorMsg = document.getElementById('error-msg');
     const logoutButton = document.getElementById('logout');
+    const logoutNav = document.getElementById('logoutNav');
     const showMoreButton = document.getElementById('showMore');
 
     let loginAttempts = 0;
@@ -16,6 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (storedUser && isLoggedIn === 'true') {
         logoutButton.style.display = 'block';
+        logoutNav.style.display = 'grid';
+        document.getElementById('register').style.display = 'none';
+        document.getElementById('login').style.display = 'none';
+
         fetchCharacter();
     }
 
@@ -37,9 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         localStorage.setItem('user', JSON.stringify(user));
 
-        document.getElementById('register').style.display = 'none';
-        welcomeMessage.innerHTML = `Dear ${firstname} ${lastname}, your registration is successfully done!`;
-        document.getElementById('welcome').style.display = 'block';
+        if (user && user.firstname && user.lastname && user.username && user.email && user.password) {
+            document.getElementById('register').style.display = 'none';
+            welcomeMessage.innerHTML = `Dear ${firstname} ${lastname}, your registration is successfully done!`;
+            document.getElementById('welcome').style.display = 'grid';
+            document.getElementById('login').style.display = 'grid';
+        } 
     });
 
     loginForm.addEventListener('submit', function(e) {
@@ -53,11 +61,12 @@ document.addEventListener('DOMContentLoaded', function() {
             loginAttempts = 0;
             localStorage.setItem('isLoggedIn', 'true'); // Store login state
             logoutButton.style.display = 'block';
+            logoutNav.style.display = 'grid';
             fetchCharacter();
         } else {
             loginAttempts++;
             if (loginAttempts >= 3) {
-                errorMsg.style.display = 'block';
+                errorMsg.style.display = 'grid';
             } else {
                 document.getElementById('loginPassword').classList.add('is-invalid');
             }
@@ -66,19 +75,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function fetchCharacter() {
         document.getElementById('login').style.display = 'none';
+        document.getElementById('register').style.display = 'none';
         document.getElementById('characterContainer').style.display = 'grid';
-        document.getElementById('showMore').style.display = 'block';
+        document.getElementById('showMore').style.display = 'grid';
 
         fetch(`https://rickandmortyapi.com/api/character/${characterId}`)
             .then(response => response.json())
             .then(data => {
                 const characterCard = document.createElement('div');
+                // characterCard.classList.add('col');
                 characterCard.classList.add('character-card');
                 characterCard.innerHTML = `
-                    <img src="${data.image}" alt="${data.name}">
-                    <h5>${data.name}</h5>
-                    <p>Species: ${data.species}</p>
-                    <p>Status: ${data.status}</p>
+                <div class="card shadow-sm">
+                    <img class="bd-placeholder-img card-img-top"  src="${data.image}" alt="${data.name}">
+                    <div class="card-body">
+                        <h5 class="card-text">${data.name}</h5>
+                        <p class="card-text">Species: ${data.species}</p>
+                        <p class="card-text">Status: ${data.status}</p>
+                    </div>
+                </div>
                 `;
                 characterContainer.appendChild(characterCard);
                 characterId++; // Increment character ID for the next fetch
@@ -93,15 +108,25 @@ document.addEventListener('DOMContentLoaded', function() {
     logoutButton.addEventListener('click', function() {
         localStorage.removeItem('isLoggedIn'); // Remove login state
         logoutButton.style.display = 'none';
+        logoutNav.style.display = 'none';
         characterContainer.style.display = 'none';
         document.getElementById('showMore').style.display = 'none';
-        document.getElementById('login').style.display = 'block';
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('register').style.display = 'grid';
         characterContainer.innerHTML = ''; // Clear the characters on logout
         characterId = 1; // Reset character ID counter
     });
 
     window.showLoginForm = function() {
         document.getElementById('welcome').style.display = 'none';
-        document.getElementById('login').style.display = 'block';
+        document.getElementById('register').style.display = 'none';
+        document.getElementById('login').style.display = 'grid';
+    };
+
+    window.showRegisterForm = function() {
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('register').style.display = 'grid';
+        localStorage.removeItem('isLoggedIn'); // Remove login state
     };
 });
